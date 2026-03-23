@@ -45,6 +45,7 @@ if($result->num_rows > 0){
 <body>
     <h1>Welcome, <?php echo htmlspecialchars($user['username']); ?>!</h1>
     <p>You have successfully logged in.</p>
+    <p><a href="page.php">Open Dashboard</a></p>
     <p><a href="logout.php">Logout</a></p>
 </body>
 </html>
