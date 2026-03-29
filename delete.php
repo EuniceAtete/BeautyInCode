@@ -1,9 +1,13 @@
 <?php
-include '../conn.php';
+include 'conn.php';
+session_start();
 
-$id = $_GET['id'];
+$id = (int) $_GET['id'];
 
-$conn->query("DELETE FROM users WHERE id=$id");
+$stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+$stmt->bind_param("i", $id);
+$stmt->execute();
 
-header("Location: home.php");
+header("Location: page.php");
+exit();
 ?>
