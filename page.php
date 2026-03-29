@@ -1,29 +1,36 @@
 <?php
-include '../conn.php';
+include 'conn.php';
 session_start();
 
-// Fetch all users
-$result = $conn->query("SELECT * FROM users");
+$result = $conn->query("SELECT id, username, email, age, gender FROM users ORDER BY id DESC");
+$currentUser = $_SESSION['user'] ?? 'Dashboard user';
 ?>
 
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <style>
-        body { background:#111; color:#fff; font-family:Arial; text-align:center; }
-        table { margin:auto; width:80%; border-collapse:collapse; }
-        th, td { padding:10px; border:1px solid #444; }
-        a { color:cyan; margin:0 5px; }
+        body { background:#111; color:#fff; font-family:Arial, sans-serif; text-align:center; margin:0; padding:40px 20px; }
+        table { margin:24px auto; width:min(100%, 950px); border-collapse:collapse; }
+        th, td { padding:12px; border:1px solid #444; }
+        th { background:#1f1f1f; }
+        a { color:cyan; margin:0 5px; font-weight:bold; text-decoration:none; }
+        a:hover { text-decoration:underline; }
+        .actions { margin-top:18px; }
     </style>
 </head>
 <body>
 
 <h1>Dashboard</h1>
-<p>Welcome, <?php echo $_SESSION['user']; ?></p>
+<p>Welcome, <?php echo htmlspecialchars($currentUser); ?></p>
 
-<a href="create.php">+ Add User</a>
-<a href="logout.php">Logout</a>
+<div class="actions">
+    <a href="create.php">+ Add User</a>
+    <a href="logout.php">Logout</a>
+</div>
 
 <table>
     <tr>
@@ -37,14 +44,14 @@ $result = $conn->query("SELECT * FROM users");
 
     <?php while($row = $result->fetch_assoc()) { ?>
     <tr>
-        <td><?= $row['id'] ?></td>
-        <td><?= $row['username'] ?></td>
-        <td><?= $row['email'] ?></td>
-        <td><?= $row['age'] ?></td>
-        <td><?= $row['gender'] ?></td>
+        <td><?= htmlspecialchars($row['id']) ?></td>
+        <td><?= htmlspecialchars($row['username']) ?></td>
+        <td><?= htmlspecialchars($row['email']) ?></td>
+        <td><?= htmlspecialchars($row['age']) ?></td>
+        <td><?= htmlspecialchars($row['gender']) ?></td>
         <td>
-            <a href="edit.php?id=<?= $row['id'] ?>">Edit</a>
-            <a href="delete.php?id=<?= $row['id'] ?>" onclick="return confirm('Delete user?')">Delete</a>
+            <a href="edit.php?id=<?= urlencode($row['id']) ?>">Edit</a>
+            <a href="delete.php?id=<?= urlencode($row['id']) ?>" onclick="return confirm('Delete user?')">Delete</a>
         </td>
     </tr>
     <?php } ?>
