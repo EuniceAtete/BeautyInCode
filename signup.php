@@ -3,16 +3,16 @@ include "conn.php";
 
 if ($_SERVER['REQUEST_METHOD'] == "POST") {
 
-    $username = $_POST['username'];
-    $email = $_POST['email'];
-    $age = $_POST['age'];
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $age = (int) $_POST['age'];
     $gender = $_POST['gender'];
     $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
 
-    $sql = "INSERT INTO users(username, email, age, gender, password)
-            VALUES('$username', '$email', '$age', '$gender', '$password')";
+    $stmt = $conn->prepare("INSERT INTO users(username, email, age, gender, password) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("ssiss", $username, $email, $age, $gender, $password);
 
-    if ($conn->query($sql) === TRUE) {
+    if ($stmt->execute()) {
         echo "<style>
         *{
         background-color:#000;
