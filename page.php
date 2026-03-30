@@ -2,7 +2,7 @@
 include 'conn.php';
 session_start();
 
-$result = $conn->query("SELECT id, username, email, age, gender FROM users ORDER BY id DESC");
+$result = $conn->query("SELECT id, username, email, age, gender FROM users ORDER BY id ASC");
 $currentUser = $_SESSION['user'] ?? 'Dashboard user';
 ?>
 
