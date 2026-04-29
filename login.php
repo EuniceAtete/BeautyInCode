@@ -24,7 +24,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         }
         </style>";
     echo "<h3>Login successful!</h3>";
-    echo "<a href='login.html'>Go back</a>";
+    echo "<a href='logout.php'>Go back</a>";
             exit();
         } else {
             echo "Invalid username or password.";
