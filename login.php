@@ -15,14 +15,23 @@ if($_SERVER['REQUEST_METHOD'] == 'POST'){
         $user = $result->fetch_assoc();
         if(password_verify($password,$user['password'])){
             $_SESSION['user'] = $user['username'];
-            header("Location: page.php");
+             echo "<style>
+        *{
+        background-color:#000;
+        color:#fff;
+        font-size:20px;
+        font-weight:bold;
+        }
+        </style>";
+    echo "<h3>Login successful!</h3>";
+    echo "<a href='login.html'>Go back</a>";
             exit();
         } else {
-            echo "Invalid email or password.";
+            echo "Invalid username or password.";
         }
 
     } else {
-    echo "Invalid email or password";
+    echo "Invalid username or password";
     }
 }
 
