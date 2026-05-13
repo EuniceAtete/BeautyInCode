@@ -74,28 +74,48 @@ switch ($method) {
 
     case 'PUT':
 
-        $data = json_decode(
-            file_get_contents("php://input"),
-            true
-        );
+        case 'PUT':
 
-        $id = $data['id'];
+    $data = json_decode(
+        file_get_contents("php://input"),
+        true
+    );
 
-        $name = $conn->real_escape_string($data['name']);
-        $email = $conn->real_escape_string($data['email']);
+    if (!isset($data['id'])) {
 
-        $conn->query("
-            UPDATE users
-            SET name = '$name',
-                email = '$email'
-            WHERE id = $id
-        ");
+        echo json_encode([
+            "error" => "ID is required"
+        ]);
+
+        break;
+    }
+
+    $id = (int)$data['id'];
+
+    $name = $conn->real_escape_string($data['name']);
+    $email = $conn->real_escape_string($data['email']);
+
+    $sql = "
+        UPDATE users
+        SET name = '$name',
+            email = '$email'
+        WHERE id = $id
+    ";
+
+    if ($conn->query($sql)) {
 
         echo json_encode([
             "message" => "User updated"
         ]);
 
-        break;
+    } else {
+
+        echo json_encode([
+            "error" => $conn->error
+        ]);
+    }
+
+    break;
 
     case 'DELETE':
 
