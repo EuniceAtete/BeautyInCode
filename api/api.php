@@ -11,12 +11,6 @@ $pass = 'G7f$9kL!2bQx@Z1m@';
 
 $conn = new mysqli($host, $user, $pass, $db);
 
-if ($conn->connect_error) {
-    die(json_encode([
-        "error" => "Connection failed: " . $conn->connect_error
-    ]));
-}
-
 $method = $_SERVER['REQUEST_METHOD'];
 
 switch ($method) {
@@ -27,9 +21,11 @@ switch ($method) {
 
             $id = $_GET['id'];
 
-            $result = $conn->query("
-                SELECT * FROM users WHERE id = $id
-            ");
+            $stmt = $conn->prepare("SELECT * FROM users WHERE id = ?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
 
             $user = $result->fetch_assoc();
 
